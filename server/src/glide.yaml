@@ -1,0 +1,9 @@
+package: Boardgame-SultansOfKaraya/server/src
+import:
+- package: google.golang.org/grpc
+  subpackages:
+  - credentials
+  - metadata
+  - naming
+- package: github.com/sirupsen/logrus.git
+  version: ^1.0.6
