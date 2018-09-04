@@ -60,11 +60,11 @@ func (c *BaseClient) WithClientFuncTimeout(ctx context.Context,clientFunc func(
 	ctx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 	var trailer metadata.MD
-	return c.UnaryCallWithContext(ctx, clientFunc, grpc.Trailer(&trailer))
+	return c.unaryCallWithContext(ctx, clientFunc, grpc.Trailer(&trailer))
 
 }
 
-func (c *BaseClient) UnaryCallWithContext(ctx context.Context, clientFunc func(clientInterface interface{}, ctx context.Context, opts ...grpc.CallOption) (interface{}, error), opts ...grpc.CallOption) (interface{}, error) {
+func (c *BaseClient) unaryCallWithContext(ctx context.Context, clientFunc func(clientInterface interface{}, ctx context.Context, opts ...grpc.CallOption) (interface{}, error), opts ...grpc.CallOption) (interface{}, error) {
 	resp, err := clientFunc(c.grpcClient, ctx, opts...)
 	return resp, err
 }
