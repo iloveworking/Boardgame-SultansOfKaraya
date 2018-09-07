@@ -9,3 +9,5 @@ import:
   version: ^1.0.6
 - package: github.com/jaegertracing/jaeger-client-go.git
   version: ^2.14.0
+- package: github.com/etcd-io/etcd.git
+  version: ^3.3.9
