@@ -7,3 +7,5 @@ import:
   - naming
 - package: github.com/sirupsen/logrus.git
   version: ^1.0.6
+- package: github.com/jaegertracing/jaeger-client-go.git
+  version: ^2.14.0
