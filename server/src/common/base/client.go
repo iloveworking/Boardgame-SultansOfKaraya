@@ -36,22 +36,22 @@ func NewBaseClent(name, ip, port string, grpcClientConstructor func(conn *grpc.C
 		port:        port,
 	}
 
-	client.conn = client.getConn()
+	client.conn = client.newConn()
 	client.grpcClient = grpcClientConstructor(client.conn)
 
 	return client
 
 }
-func (c *BaseClient) WithClientFunc(ctx context.Context,clientFunc func(
+func (c *BaseClient) WithClientFunc(ctx context.Context, clientFunc func(
 	clientInterface interface{},
 	ctx context.Context,
 	opts ...grpc.CallOption,
 ) (interface{}, error)) (interface{}, error) {
 
-	return c.WithClientFuncTimeout(ctx,clientFunc, clientDialTimeout)
+	return c.WithClientFuncTimeout(ctx, clientFunc, clientDialTimeout)
 }
 
-func (c *BaseClient) WithClientFuncTimeout(ctx context.Context,clientFunc func(
+func (c *BaseClient) WithClientFuncTimeout(ctx context.Context, clientFunc func(
 	clientInterface interface{},
 	ctx context.Context,
 	opts ...grpc.CallOption,
@@ -91,7 +91,6 @@ func (c *BaseClient) getConn() *grpc.ClientConn {
 			grpc.WithBlock(),
 		}
 
-		//todo etcd
 
 		conn, err := grpc.DialContext(ctx, target, dialOpts...)
 		if err != nil {
@@ -105,7 +104,26 @@ func (c *BaseClient) getConn() *grpc.ClientConn {
 
 }
 
+
+func (c *BaseClient) newConn() *grpc.ClientConn {
+
+	target := c.getTargetName()
+
+	ctx, _ := context.WithTimeout(context.Background(), clientDialTimeout)
+
+	dialOpts := []grpc.DialOption{
+		grpc.WithBlock(),
+	}
+
+
+	conn, err := grpc.DialContext(ctx, target, dialOpts...)
+	if err != nil {
+		return nil
+	}
+	return conn
+
+}
+
 func (c *BaseClient) getTargetName() string {
-	//todo etcd
 	return c.ip + ":" + c.port
 }

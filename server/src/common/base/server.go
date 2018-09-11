@@ -12,7 +12,7 @@ type Service interface {
 	//when service destroy
 	OnDestroy(err error)
 
-	OnRegisterService(svr *grpc.Server)
+	OnRegisterGrpcServer(svr *grpc.Server)
 }
 
 //noinspection GoNameStartsWithPackageName
@@ -37,7 +37,7 @@ func (s *BaseServer) Start() error {
 
 	for _, server := range s.services {
 		server.OnCreate()
-		server.OnRegisterService(grpcServer)
+		server.OnRegisterGrpcServer(grpcServer)
 	}
 
 	listen, err := net.Listen("tcp", fmt.Sprintf("%s:%s", s.Ip, s.Port))
